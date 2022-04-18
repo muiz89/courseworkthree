@@ -13,17 +13,36 @@
           <div class="product-details">
             <p v-html="product.title"></p>
             <p>Price: ${{ product.price }}</p>
+            <!-- Adding a "Remove" button to remove the lesson from cart -->
             <button @click="remove(product)">remove</button>
           </div>
         </div>
       </div>
       <div class="CheckOut-form">
-        <input placeholder=" Name" />
+        <span class="checkoutInput">
+          <input
+            type="text"
+            v-model="name"
+            placeholder="Name"
+            v-on:keypress="isLetter($event)"
+          />
+        </span>
+        <span class="checkoutInput">
+          <input
+            type="text"
+            v-model="phone"
+            placeholder="Number"
+            v-on:keypress="isNumber($event)"
+          />
+          <p></p>
+        </span>
+        <button v-if="name == '' || phone == ''" disabled="disabled">
+          Checkout
+        </button>
+        <button v-else @click="submitForm()">Checkout</button>
+        <!--<button v-if="checkoutBtn" v-on:click="submitForm">Checkout</button>-->
 
-        <input placeholder="Phone" />
-        <button v-if="checkoutBtn" v-on:click="submitForm">Checkout</button>
-
-        <button disabled v-else>Checkout</button>
+        <!--<button disabled v-else>Checkout</button>-->
       </div>
     </div>
   </main>
@@ -35,12 +54,50 @@ export default {
   data() {
     return {
       name: "",
-      phone: "",
+      phone: "0",
+      errorMessage: "",
+      successfulCheckout: "",
     };
   },
   methods: {
     remove(product) {
+      console.log("removing lesson from cart...");
       this.$emit("removeProduct", product);
+    },
+    isLetter(e) {
+      //for every character input
+      let char = String.fromCharCode(e.keyCode);
+      //if the character is an alphabet
+      if (/^[A-Za-z]+$/.test(char)) {
+        this.errorMessage = "";
+        return true;
+      } else {
+        //displaying error message
+        this.errorMessage = "Please enter only characters";
+      }
+    },
+    //function to check if the user input for phone has only numbers
+    isNumber(e) {
+      //matching the user input with the character code of 0-9
+      if (e.charCode >= 48 && e.charCode <= 57) {
+        this.errorMessage = "";
+        return true;
+      } else {
+        //displaying error message
+        this.errorMessage = "Please enter only numbers";
+      }
+    },
+    submitForm() {
+      if (this.errorMessage == "" && this.cart.length > 0) {
+        alert("Successfully placed order!");
+        this.successfulCheckout = "Thank you for purchasing!";
+        this.name = "";
+        this.phone = "";
+      } else if (this.cart.length == 0) {
+        alert("No products in cart!");
+      } else {
+        alert("Please enter the correct values.");
+      }
     },
   },
 };

@@ -13,7 +13,7 @@
             <div class="product-details">
               <p v-html="product.Location"></p>
               <p>Price: {{ product.price }}</p>
-
+              <p>Spaces: {{ product.availableInventory }}
               <div class="add-cart">
                 <button v-on:click="addToCart(product)">ADD TO CART</button>
               </div>
@@ -35,8 +35,21 @@ export default {
       console.log("Added lesson", product.id);
       this.$emit("addProduct", product);
     },
-  },
-};
+    canAddToCart(product) {
+    return product.spaces > 0;
+    },
+    fetchlessons() {
+      //fetching the lessons from server
+      fetch("https://individual2cw.herokuapp.com/collection/lesson").then(
+        function (response) {
+          response.json().then(function (json) {
+            return json;
+            });
+            }
+            );
+            },
+            },
+  };
 </script>
 <style scoped>
 body {
