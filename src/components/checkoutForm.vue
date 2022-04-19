@@ -258,5 +258,6 @@ html {
   cursor: pointer;
   width: 100%;
   opacity: 0.9;
+  height: 70px;
 }
 </style>

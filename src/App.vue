@@ -62,7 +62,6 @@ export default {
       this.cart.splice(this.cart.indexOf(product), 1);
     },
     addToCart(product) {
-      console.log("addLesson event received by the root component.");
       this.cart.push(product);
     },
     cartItemCount() {

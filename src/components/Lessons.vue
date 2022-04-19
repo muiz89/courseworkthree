@@ -33,6 +33,7 @@ export default {
   methods: {
     addToCart(product) {
       console.log("Added lesson", product.id);
+      product.availableInventory -= 1
       this.$emit("addProduct", product);
     },
     canAddToCart(product) {
